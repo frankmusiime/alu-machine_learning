@@ -1,16 +1,24 @@
 #!/usr/bin/env python3
-"""Function that adds two 2D matrices element-wise."""
+'''
+Defines a function that adds two two-dimensional arrays
+'''
 
 
 def add_matrices2D(mat1, mat2):
-    if len(mat1) != len(mat2):
-        return None
+    '''
+    Returns a new array that adds two other two-dimesional arrays
+    '''
+    r1 = len(mat1)
+    c1 = len(mat1[0])
+    r2 = len(mat2)
+    c2 = len(mat2[0])
 
-    result = []
+    if r1 == r2 and c1 == c2:
+        matrix = [[None for _ in range(c1)] for _ in range(r1)]
+        for r in range(r1):
+            for c in range(c1):
+                matrix[r][c] = mat1[r][c] + mat2[r][c]
 
-    for i in range(len(mat1)):
-        if len(mat1[i]) != len(mat2[i]):
-            return None
-        result.append([mat1[i][j] + mat2[i][j] for j in range(len(mat1[i]))])
+        return matrix
 
-    return result
+    return None

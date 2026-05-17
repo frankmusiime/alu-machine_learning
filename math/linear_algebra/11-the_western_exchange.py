@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Function that transposes a numpy.ndarray."""
+"""Transpose a numpy.ndarray."""
 
 
 def np_transpose(matrix):
-    return matrix.T
+    """Returns the transpose of a numpy.ndarray."""
+    return matrix.transpose()
