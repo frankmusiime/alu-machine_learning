@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""Function that adds two 2D matrices element-wise."""
+
+
 def add_matrices2D(mat1, mat2):
     if len(mat1) != len(mat2):
         return None
