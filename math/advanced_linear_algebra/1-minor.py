@@ -6,8 +6,9 @@ Module that computes the minor matrix of a square matrix.
 
 def determinant(matrix):
     """
-    Helper function to compute determinant of a square matrix.
+    Computes determinant of a square matrix.
     """
+
     if matrix == [[]]:
         return 1
 
@@ -25,12 +26,13 @@ def determinant(matrix):
     det = 0
 
     for col in range(n):
-        sub_matrix = [
+        minor = [
             [matrix[i][j] for j in range(n) if j != col]
             for i in range(1, n)
         ]
+
         sign = (-1) ** col
-        det += sign * matrix[0][col] * determinant(sub_matrix)
+        det += sign * matrix[0][col] * determinant(minor)
 
     return det
 
@@ -40,22 +42,24 @@ def minor(matrix):
     Computes the minor matrix of a square matrix.
 
     Args:
-        matrix (list of list of int/float): input matrix
+        matrix (list of list): input matrix
 
     Returns:
         list of list: minor matrix
 
     Raises:
-        TypeError: if matrix is not a list of lists
-        ValueError: if matrix is empty or not square
+        TypeError: if matrix is not list of lists
+        ValueError: if matrix is not square or empty
     """
 
+    # Type check
     if (
         not isinstance(matrix, list)
         or not all(isinstance(row, list) for row in matrix)
     ):
         raise TypeError("matrix must be a list of lists")
 
+    # Empty or invalid square check
     if matrix == [] or matrix == [[]]:
         raise ValueError("matrix must be a non-empty square matrix")
 
@@ -64,19 +68,24 @@ def minor(matrix):
     if any(len(row) != n for row in matrix):
         raise ValueError("matrix must be a non-empty square matrix")
 
+    # Special case: 1x1 matrix
+    if n == 1:
+        return [[1]]
+
     # Build minor matrix
     minor_matrix = []
 
     for i in range(n):
-        row_minors = []
+        row = []
 
         for j in range(n):
             sub_matrix = [
                 [matrix[x][y] for y in range(n) if y != j]
                 for x in range(n) if x != i
             ]
-            row_minors.append(determinant(sub_matrix))
 
-        minor_matrix.append(row_minors)
+            row.append(determinant(sub_matrix))
+
+        minor_matrix.append(row)
 
     return minor_matrix
