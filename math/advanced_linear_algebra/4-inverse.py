@@ -5,9 +5,7 @@ Module that computes the inverse of a square matrix.
 
 
 def determinant(matrix):
-    """
-    Computes determinant of a square matrix.
-    """
+    """Computes determinant of a square matrix."""
 
     if matrix == [[]]:
         return 1
@@ -38,9 +36,7 @@ def determinant(matrix):
 
 
 def cofactor(matrix):
-    """
-    Computes cofactor matrix of a square matrix.
-    """
+    """Computes cofactor matrix."""
 
     n = len(matrix)
     cof = []
@@ -63,9 +59,7 @@ def cofactor(matrix):
 
 
 def adjugate(matrix):
-    """
-    Computes adjugate matrix (transpose of cofactor).
-    """
+    """Computes adjugate matrix."""
 
     cof = cofactor(matrix)
     n = len(matrix)
@@ -99,22 +93,16 @@ def inverse(matrix):
     if any(len(row) != n for row in matrix):
         raise ValueError("matrix must be a non-empty square matrix")
 
-    # 1x1 case
-    if n == 1:
-        return [[1]]
-
     det = determinant(matrix)
 
-    # singular matrix
+    # Singular matrix
     if det == 0:
         return None
 
     adj = adjugate(matrix)
 
-    # divide adjugate by determinant
-    inv = [
+    # IMPORTANT FIX: correct 1x1 handling (NO special case needed)
+    return [
         [adj[i][j] / det for j in range(n)]
         for i in range(n)
     ]
-
-    return inv
