@@ -6,7 +6,7 @@ Module that computes the adjugate matrix of a square matrix.
 
 def determinant(matrix):
     """
-    Helper function to compute determinant of a square matrix.
+    Computes determinant of a square matrix.
     """
 
     if matrix == [[]]:
@@ -26,63 +26,55 @@ def determinant(matrix):
     det = 0
 
     for col in range(n):
-        minor = [
+        sub = [
             [matrix[i][j] for j in range(n) if j != col]
             for i in range(1, n)
         ]
 
         sign = (-1) ** col
-        det += sign * matrix[0][col] * determinant(minor)
+        det += sign * matrix[0][col] * determinant(sub)
 
     return det
 
 
 def cofactor(matrix):
     """
-    Computes the cofactor matrix of a square matrix.
+    Computes cofactor matrix of a square matrix.
     """
 
     n = len(matrix)
-    cofactor_matrix = []
+    cof = []
 
     for i in range(n):
         row = []
 
         for j in range(n):
-            sub_matrix = [
+            sub = [
                 [matrix[x][y] for y in range(n) if y != j]
                 for x in range(n) if x != i
             ]
 
             sign = (-1) ** (i + j)
-            row.append(sign * determinant(sub_matrix))
+            row.append(sign * determinant(sub))
 
-        cofactor_matrix.append(row)
+        cof.append(row)
 
-    return cofactor_matrix
+    return cof
 
 
 def adjugate(matrix):
     """
-    Computes the adjugate matrix of a square matrix.
-
-    Args:
-        matrix (list of list of int/float): input matrix
-
-    Returns:
-        list of list: adjugate matrix
-
-    Raises:
-        TypeError: if matrix is not a list of lists
-        ValueError: if matrix is empty or not square
+    Computes adjugate matrix (transpose of cofactor).
     """
 
+    # Type check
     if (
         not isinstance(matrix, list)
         or not all(isinstance(row, list) for row in matrix)
     ):
         raise TypeError("matrix must be a list of lists")
 
+    # Empty / square check
     if matrix == [] or matrix == [[]]:
         raise ValueError("matrix must be a non-empty square matrix")
 
@@ -90,6 +82,10 @@ def adjugate(matrix):
 
     if any(len(row) != n for row in matrix):
         raise ValueError("matrix must be a non-empty square matrix")
+
+    # 1x1 case
+    if n == 1:
+        return [[1]]
 
     cof = cofactor(matrix)
 

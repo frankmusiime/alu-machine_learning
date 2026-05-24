@@ -26,20 +26,20 @@ def determinant(matrix):
     det = 0
 
     for col in range(n):
-        minor = [
+        sub = [
             [matrix[i][j] for j in range(n) if j != col]
             for i in range(1, n)
         ]
 
         sign = (-1) ** col
-        det += sign * matrix[0][col] * determinant(minor)
+        det += sign * matrix[0][col] * determinant(sub)
 
     return det
 
 
 def cofactor(matrix):
     """
-    Computes cofactor matrix.
+    Computes cofactor matrix of a square matrix.
     """
 
     n = len(matrix)
@@ -83,12 +83,14 @@ def inverse(matrix):
     Returns None if matrix is singular.
     """
 
+    # Type check
     if (
         not isinstance(matrix, list)
         or not all(isinstance(row, list) for row in matrix)
     ):
         raise TypeError("matrix must be a list of lists")
 
+    # Empty / square check
     if matrix == [] or matrix == [[]]:
         raise ValueError("matrix must be a non-empty square matrix")
 
@@ -96,6 +98,10 @@ def inverse(matrix):
 
     if any(len(row) != n for row in matrix):
         raise ValueError("matrix must be a non-empty square matrix")
+
+    # 1x1 case
+    if n == 1:
+        return [[1]]
 
     det = determinant(matrix)
 
@@ -105,7 +111,7 @@ def inverse(matrix):
 
     adj = adjugate(matrix)
 
-    # divide each element by determinant
+    # divide adjugate by determinant
     inv = [
         [adj[i][j] / det for j in range(n)]
         for i in range(n)

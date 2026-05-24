@@ -17,40 +17,43 @@ def definiteness(matrix):
         str or None: type of definiteness or None
     """
 
-    # Check type
+    # Type check
     if not isinstance(matrix, np.ndarray):
         raise TypeError("matrix must be a numpy.ndarray")
 
-    # Check valid matrix
-    if matrix.size == 0 or matrix.ndim != 2 or matrix.shape[0] != matrix.shape[1]:
+    # Valid matrix check
+    if (
+        matrix.size == 0
+        or matrix.ndim != 2
+        or matrix.shape[0] != matrix.shape[1]
+    ):
         return None
 
-    # Ensure symmetric (required for definiteness)
+    # Must be symmetric (required for definiteness)
     if not np.allclose(matrix, matrix.T):
         return None
 
-    # Compute eigenvalues
+    # Eigenvalues
     eigenvalues = np.linalg.eigvals(matrix)
 
-    # Numerical tolerance
     eps = 1e-10
 
-    positive = np.all(eigenvalues > eps)
-    non_negative = np.all(eigenvalues >= -eps)
-    negative = np.all(eigenvalues < -eps)
-    non_positive = np.all(eigenvalues <= eps)
+    all_positive = np.all(eigenvalues > eps)
+    all_non_negative = np.all(eigenvalues >= -eps)
+    all_negative = np.all(eigenvalues < -eps)
+    all_non_positive = np.all(eigenvalues <= eps)
 
-    # Classification
-    if positive:
+    # Classification rules
+    if all_positive:
         return "Positive definite"
 
-    if non_negative and np.any(np.abs(eigenvalues) <= eps):
+    if all_non_negative and np.any(np.abs(eigenvalues) <= eps):
         return "Positive semi-definite"
 
-    if negative:
+    if all_negative:
         return "Negative definite"
 
-    if non_positive and np.any(np.abs(eigenvalues) <= eps):
+    if all_non_positive and np.any(np.abs(eigenvalues) <= eps):
         return "Negative semi-definite"
 
     return "Indefinite"
