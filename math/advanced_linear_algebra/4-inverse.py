@@ -39,6 +39,11 @@ def cofactor(matrix):
     """Computes cofactor matrix."""
 
     n = len(matrix)
+
+    # IMPORTANT FIX: handle 1x1 cleanly
+    if n == 1:
+        return [[1]]
+
     cof = []
 
     for i in range(n):
@@ -59,10 +64,13 @@ def cofactor(matrix):
 
 
 def adjugate(matrix):
-    """Computes adjugate matrix."""
+    """Returns transpose of cofactor matrix."""
 
     cof = cofactor(matrix)
     n = len(matrix)
+
+    if n == 1:
+        return [[1]]
 
     return [
         [cof[j][i] for j in range(n)]
@@ -74,7 +82,7 @@ def inverse(matrix):
     """
     Computes inverse of a square matrix.
 
-    Returns None if matrix is singular.
+    Returns None if singular.
     """
 
     # Type check
@@ -101,7 +109,7 @@ def inverse(matrix):
 
     adj = adjugate(matrix)
 
-    # IMPORTANT FIX: correct 1x1 handling (NO special case needed)
+    # FINAL SAFE RETURN (no special-case bugs)
     return [
         [adj[i][j] / det for j in range(n)]
         for i in range(n)
