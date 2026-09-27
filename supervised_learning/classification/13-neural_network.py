@@ -78,3 +78,46 @@ class NeuralNetwork:
         sigmoid = 1 / (1 + np.exp(-z))
         self.__A2 = sigmoid
         return self.__A1, self.__A2
+
+    def cost(self, Y, A):
+        """ Calculates the cost of the model using logistic regression
+
+        Args:
+            Y (_type_): _description_
+            A (_type_): _description_
+        """
+        loss = -(Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
+        cost = np.mean(loss)
+        return cost
+
+    def evaluate(self, X, Y):
+        """ Evaluates the neural network’s predictions
+
+        Args:
+            X (_type_): _description_
+            Y (_type_): _description_
+        """
+        self.forward_prop(X)
+        return np.where(self.__A2 >= 0.5, 1, 0), self.cost(Y, self.__A2)
+
+    def gradient_descent(self, X, Y, A1, A2, alpha=0.05):
+        """ Calculates one pass of gradient descent on the neural network
+
+        Args:
+            X (_type_): _description_
+            Y (_type_): _description_
+            A1 (_type_): _description_
+            A2 (_type_): _description_
+            alpha (float, optional): _description_. Defaults to 0.05.
+        """
+        m = Y.shape[1]
+        dz2 = A2 - Y
+        dw2 = np.matmul(A1, dz2.T) / m
+        db2 = np.sum(dz2, axis=1, keepdims=True) / m
+        dz1 = np.matmul(self.__W2.T, dz2) * A1 * (1 - A1)
+        dw1 = np.matmul(X, dz1.T) / m
+        db1 = np.sum(dz1, axis=1, keepdims=True) / m
+        self.__W2 -= alpha * dw2.T
+        self.__b2 -= alpha * db2
+        self.__W1 -= alpha * dw1.T
+        self.__b1 -= alpha * db1

@@ -78,3 +78,24 @@ class NeuralNetwork:
         sigmoid = 1 / (1 + np.exp(-z))
         self.__A2 = sigmoid
         return self.__A1, self.__A2
+
+    def cost(self, Y, A):
+        """ Calculates the cost of the model using logistic regression
+
+        Args:
+            Y (_type_): _description_
+            A (_type_): _description_
+        """
+        loss = -(Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
+        cost = np.mean(loss)
+        return cost
+
+    def evaluate(self, X, Y):
+        """ Evaluates the neural network’s predictions
+
+        Args:
+            X (_type_): _description_
+            Y (_type_): _description_
+        """
+        self.forward_prop(X)
+        return np.where(self.__A2 >= 0.5, 1, 0), self.cost(Y, self.__A2)
