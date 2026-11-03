@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 """Display a GitHub user's location."""
 
@@ -13,8 +12,8 @@ if __name__ == "__main__":
 
     if res.status_code == 403:
         reset = int(res.headers.get("X-Ratelimit-Reset", 0))
-        now = int(time.time())
-        minutes = (reset - now) // 60
+        current = int(time.time())
+        minutes = (reset - current) // 60
         print("Reset in {} min".format(minutes))
 
     elif res.status_code == 404:
