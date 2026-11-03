@@ -1,0 +1,2 @@
+// create and switch database
+use my_db
